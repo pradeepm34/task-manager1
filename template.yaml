@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Task Manager API
+
+Globals:
+  Function:
+    Timeout: 5
+    Runtime: nodejs20.x
+    MemorySize: 128
+    LoggingConfig:
+      LogFormat: JSON
+
+Resources:
+  CreateTaskFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: createTask.handler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /task/create
+            Method: POST
+
+  GetTaskListFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: getTaskList.handler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /task/list
+            Method: GET
+  
+  UpdateTaskFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: updateTask.handler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /task/update/{taskId}
+            Method: PATCH
+  
+  DeleteTaskFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: src/
+      Handler: deleteTask.handler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /task/delete/{taskId}
+            Method: DELETE
