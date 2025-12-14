@@ -10,7 +10,25 @@ Globals:
     LoggingConfig:
       LogFormat: JSON
 
+Parameters:
+  TableName:
+    Type: String
+    Default: TaskTable
+
 Resources:
+  TaskTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName:
+        Ref: TableName
+      AttributeDefinitions: 
+        - AttributeName: taskId
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: taskId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST 
+
   CreateTaskFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -19,6 +37,14 @@ Resources:
       Runtime: nodejs20.x
       Architectures:
       - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableName
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              Ref: TableName
       Events:
         ApiEvent:
           Type: Api
@@ -34,6 +60,14 @@ Resources:
       Runtime: nodejs20.x
       Architectures:
       - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableName
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName:
+              Ref: TableName
       Events:
         ApiEvent:
           Type: Api
@@ -49,6 +83,14 @@ Resources:
       Runtime: nodejs20.x
       Architectures:
       - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableName
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              Ref: TableName     
       Events:
         ApiEvent:
           Type: Api
@@ -64,6 +106,14 @@ Resources:
       Runtime: nodejs20.x
       Architectures:
       - x86_64
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableName
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName:
+              Ref: TableName
       Events:
         ApiEvent:
           Type: Api
