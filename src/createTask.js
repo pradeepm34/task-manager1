@@ -7,8 +7,6 @@ exports.handler = async (event) => {
   // use UUID for real project
   const taskId = `${Date.now()} - ${Math.random().toString(36).slice(2)}`;
 
-  console.log("body", body);
-
   await client.send(
     new PutItemCommand({
       TableName: process.env.TABLE_NAME,
